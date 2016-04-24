@@ -57,6 +57,7 @@
 #include <limits>
 #include <fstream>
 #include <cstring>
+#include <cwchar>
 
 class Perceptron
 {
@@ -284,7 +285,7 @@ private:
 typedef std::string Feeling;
 #endif
 
-typedef char SPOTriplet;
+typedef wchar_t SPOTriplet;
 typedef std::pair<long long, SPOTriplet> ReinforcedAction;
 
 class QL

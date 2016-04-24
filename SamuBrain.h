@@ -58,6 +58,7 @@
 #include <vector>
 #include <set>
 #include <cstdlib>
+#include <cwchar>
 
 class Habituation
 {
@@ -111,9 +112,9 @@ class MentalProcessingUnit
     MPU m_samuQl;
     Habituation m_habi;
 
-    char **m_prev;
-    char ** fr;
-    char ** fp;
+    wchar_t **m_prev;
+    wchar_t ** fr;
+    wchar_t ** fp;
 
     MentalProcessingUnit ( const MentalProcessingUnit & );
     MentalProcessingUnit & operator= ( const MentalProcessingUnit & );
@@ -129,13 +130,13 @@ public:
     MPU getSamu() {
         return m_samuQl;
     }
-    char ** getPrev() {
+    wchar_t ** getPrev() {
         return m_prev;
     }
-    char ** getFp() {
+    wchar_t ** getFp() {
         return fp;
     }
-    char ** getFr() {
+    wchar_t ** getFr() {
         return fr;
     }
     Habituation& getHabituation() {
@@ -167,14 +168,14 @@ class SamuBrain
     bool m_habituation {false};
 
     MORGAN newMPU ();
-    int pred ( char **reality, char **predictions, int, int & );
-    int pred ( MORGAN, char **reality, char **predictions, int, int & );
-    void apred ( int r, int c, char **reality, char **predictions, int isLearning );
+    int pred ( wchar_t **reality, wchar_t **predictions, int, int & );
+    int pred ( MORGAN, wchar_t **reality, wchar_t **predictions, int, int & );
+    void apred ( int r, int c, wchar_t **reality, wchar_t **predictions, int isLearning );
     void init_MPUs ( bool ex );
     std::string get_foobar ( MORGAN ) const;
 
-    char *** fp;
-    char *** fr;
+    wchar_t *** fp;
+    wchar_t *** fr;
 
 
     SamuBrain ( const SamuBrain & );
@@ -487,7 +488,7 @@ public:
     SamuBrain ( int w = 30, int h = 20 );
     ~SamuBrain();
 
-    void learning ( char **reality, char **predictions, char *** fp, char *** fr );
+    void learning ( wchar_t **reality, wchar_t **predictions, wchar_t *** fp, wchar_t *** fr );
     int getW() const;
     int getH() const;
     bool isSearching() const;

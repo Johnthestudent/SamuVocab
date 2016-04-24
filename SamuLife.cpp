@@ -63,12 +63,12 @@ else
   gameOfLife = new GameOfLife ( w, h );
   gameOfLife->start();
 
-  connect ( gameOfLife, SIGNAL ( cellsChanged ( char **, char **, char **, char ** ) ),
-            this, SLOT ( updateCells ( char **, char **, char **, char ** ) ) );
+  connect ( gameOfLife, SIGNAL ( cellsChanged ( wchar_t **, wchar_t **, wchar_t **, wchar_t ** ) ),
+            this, SLOT ( updateCells ( wchar_t **, wchar_t **, wchar_t **, wchar_t ** ) ) );
 
 }
 
-void SamuLife::updateCells ( char **lattice, char **prediction, char **fp, char** fr )
+void SamuLife::updateCells ( wchar_t **lattice, wchar_t **prediction, wchar_t **fp, wchar_t** fr )
 {
   this->lattice = lattice;
   this->prediction = prediction;
@@ -80,7 +80,10 @@ void SamuLife::updateCells ( char **lattice, char **prediction, char **fp, char*
 void SamuLife::paintEvent ( QPaintEvent* )
 {
   QPainter qpainter ( this );
-
+  
+  QFont font2 = qpainter.font() ;
+  font2.setPointSize ( 10 );
+  qpainter.setFont ( font2 );
   for ( int i {0}; i<gameOfLife->getH(); ++i )
     {
       for ( int j {0}; j<gameOfLife->getW(); ++j )
@@ -88,7 +91,7 @@ void SamuLife::paintEvent ( QPaintEvent* )
 
           if ( lattice )
             {
-              if ( lattice[i][j] == 1 )
+              /*if ( lattice[i][j] == 1 )
                 qpainter.fillRect ( j*m_cw, i*m_ch,
                                     m_cw, m_ch, Qt::red );
               else if ( lattice[i][j] == 2 )
@@ -100,21 +103,23 @@ void SamuLife::paintEvent ( QPaintEvent* )
               else if ( lattice[i][j] == 4 )
                 qpainter.fillRect ( j*m_cw, i*m_ch,
                                     m_cw, m_ch, Qt::magenta );
-              else
+              else*/
                 qpainter.fillRect ( j*m_cw, i*m_ch,
                                     m_cw, m_ch, Qt::white );
 
 qpainter.setPen(QPen(Qt::black, 1));
+wchar_t text1[] = {lattice[i][j]};
+std::wstring wtext1(text1);
                     qpainter.drawText(j*m_cw +2, 
 				     i*m_ch +17, 
-				      QString( QChar(lattice[i][j])));
-	      
+				      //QString( Qwchar_t(lattice[i][j])));
+	      		QString::fromStdWString(wtext1));
 		
 		
 	    }
           if ( prediction )
             {
-              if ( prediction[i][j] == 1 )
+              /*if ( prediction[i][j] == 1 )
                 qpainter.fillRect ( gameOfLife->getW() *m_cw + j*m_cw, i*m_ch,
                                     m_cw, m_ch, Qt::red );
               else if ( prediction[i][j] == 2 )
@@ -126,20 +131,34 @@ qpainter.setPen(QPen(Qt::black, 1));
               else if ( prediction[i][j] == 4 )
                 qpainter.fillRect ( gameOfLife->getW() *m_cw + j*m_cw, i*m_ch,
                                     m_cw, m_ch, Qt::yellow );
-              else if ( prediction[i][j] == 5 )
+              else*/ 
+
+// Már megtanulta (SamuBrain.cpp 1024. sora)
+
+if ( prediction[i][j] == 5 )
                 qpainter.fillRect ( gameOfLife->getW() *m_cw + j*m_cw, i*m_ch,
-                                    m_cw, m_ch, Qt::cyan );
+                                    m_cw, m_ch, Qt::green );
               else
                 qpainter.fillRect ( gameOfLife->getW() *m_cw + j*m_cw, i*m_ch,
                                     m_cw, m_ch, Qt::white );
 		
 		
 qpainter.setPen(QPen(Qt::blue, 1));
+
+// valódi nyomtatható karakterünk van
+if(prediction[i][j]>20)
+{
+wchar_t text2[] ={prediction[i][j]};
+std::wstring wtext2(text2);
+
                     qpainter.drawText(gameOfLife->getW() *m_cw +j*m_cw +2, 
 				     i*m_ch +17, 
-				      QString( QChar(prediction[i][j])));
-		
-            }
+				      //QString( Qwchar_t(prediction[i][j])));
+			QString::fromStdWString(wtext2));
+
+}
+       
+ }
 
             
           if ( fp )

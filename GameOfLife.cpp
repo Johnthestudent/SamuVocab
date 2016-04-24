@@ -51,34 +51,34 @@
 
 #include "GameOfLife.h"
 
-GameOfLife::GameOfLife ( int w, int h ) : m_w ( w ), m_h ( h )
+GameOfLife::GameOfLife ( int w, int h ) : m_w ( w ), m_h ( h ), xx ( w )
 {
 
-  lattices = new char**[2];
+  lattices = new wchar_t**[2];
 
-  lattices[0] = new char*[m_h];
+  lattices[0] = new wchar_t*[m_h];
   for ( int i {0}; i<m_h; ++i )
     {
-      lattices[0][i] = new char [m_w];
+      lattices[0][i] = new wchar_t [m_w];
     }
 
-  lattices[1] = new char*[m_h];
+  lattices[1] = new wchar_t*[m_h];
 
   for ( int i {0}; i<m_h; ++i )
     {
-      lattices[1][i] = new char [m_w];
+      lattices[1][i] = new wchar_t [m_w];
     }
 
-  predictions = new char*[m_h];
+  predictions = new wchar_t*[m_h];
 
   for ( int i {0}; i<m_h; ++i )
     {
-      predictions[i] = new char [m_w];
+      predictions[i] = new wchar_t [m_w];
     }
 
   latticeIndex = 0;
 
-  char ** lattice = lattices[latticeIndex];
+  wchar_t ** lattice = lattices[latticeIndex];
 
   for ( int i {0}; i<m_h; ++i )
     for ( int j {0}; j<m_w; ++j )
@@ -112,7 +112,7 @@ GameOfLife::~GameOfLife()
 }
 
 
-char ** GameOfLife::lattice()
+wchar_t ** GameOfLife::lattice()
 {
   return lattices[latticeIndex];
 }
@@ -120,7 +120,7 @@ char ** GameOfLife::lattice()
 void GameOfLife::run()
 {
 
-  char **fp, **fr;
+  wchar_t **fp, **fr;
   while ( true )
     {
       QThread::msleep ( m_delay );
@@ -157,7 +157,7 @@ void GameOfLife::pause()
   paused = !paused;
 }
 
-int GameOfLife::numberOfNeighbors ( char **lattice, int r, int c, int state )
+int GameOfLife::numberOfNeighbors ( wchar_t **lattice, int r, int c, int state )
 {
   int number {0};
 
@@ -196,7 +196,7 @@ int GameOfLife::numberOfNeighbors ( char **lattice, int r, int c, int state )
 }
 
 
-void GameOfLife::clear_lattice ( char **nextLattice )
+void GameOfLife::clear_lattice ( wchar_t **nextLattice )
 {
   for ( int i {0}; i<m_h; ++i )
     for ( int j {0}; j<m_w; ++j )
@@ -205,7 +205,7 @@ void GameOfLife::clear_lattice ( char **nextLattice )
       }
 }
 
-void GameOfLife::fill_lattice ( char **nextLattice, int color )
+void GameOfLife::fill_lattice ( wchar_t **nextLattice, int color )
 {
   for ( int i {0}; i<m_h; ++i )
     for ( int j {0}; j<m_w; ++j )
@@ -214,7 +214,7 @@ void GameOfLife::fill_lattice ( char **nextLattice, int color )
       }
 }
 
-void GameOfLife::control_Conway ( char **prevLattice, char **nextLattice )
+void GameOfLife::control_Conway ( wchar_t **prevLattice, wchar_t **nextLattice )
 {
   for ( int i {0}; i<m_h; ++i )
 
@@ -248,7 +248,7 @@ void GameOfLife::control_Conway ( char **prevLattice, char **nextLattice )
       }
 }
 
-void GameOfLife::control_Movie ( char **nextLattice )
+void GameOfLife::control_Movie ( wchar_t **nextLattice )
 {
   if ( m_time %3 ==0 )
     {
@@ -281,7 +281,7 @@ void GameOfLife::control_Movie ( char **nextLattice )
 
 }
 
-void GameOfLife::control_Stroop ( char **nextLattice )
+void GameOfLife::control_Stroop ( wchar_t **nextLattice )
 {
   if ( ++age <20 )
     {
@@ -327,18 +327,17 @@ void GameOfLife::control_Stroop ( char **nextLattice )
 
 }
 
-void GameOfLife::ticker ( char **lattice, std::string & hello )
+void GameOfLife::ticker ( wchar_t **lattice, std::wstring & hello )
 {
   //static int xx = 34;//hello.length();
 
   int l = hello.length();
-
   for ( int i {0}; i<l; ++i )
     {
       if ( xx+i >= 0 && xx+i < m_w )
         {
 
-          char c = hello[i];
+          wchar_t c = hello[i];
           lattice[0][xx+i] = c;
 
         }
@@ -347,7 +346,7 @@ void GameOfLife::ticker ( char **lattice, std::string & hello )
   --xx;
   if ( xx< ( -1*l ) )
     {
-      xx= 34;  //hello.length();
+      xx= m_w;  //hello.length();
     }
 
 }
@@ -356,8 +355,8 @@ void GameOfLife::ticker ( char **lattice, std::string & hello )
 void GameOfLife::development()
 {
 
-  char **prevLattice = lattices[latticeIndex];
-  char **nextLattice = lattices[ ( latticeIndex+1 ) %2];
+  wchar_t **prevLattice = lattices[latticeIndex];
+  wchar_t **nextLattice = lattices[ ( latticeIndex+1 ) %2];
 
   /*
   std::string hello1 = "I am Samu. I am a disembodied developmental robotic agent.";
@@ -1417,7 +1416,7 @@ void GameOfLife::development()
     "receive",
     "design",
     "president",
-    "charge",
+    "wchar_tge",
     "mistake",
     "hospital",
     "remain",
@@ -1517,7 +1516,7 @@ void GameOfLife::development()
     "perfect",
     "recognize",
     "frequently",
-    "character",
+    "wchar_tacter",
     "personal",
     "disappear",
     "success",
@@ -1607,10 +1606,10 @@ void GameOfLife::development()
       if ( samuBrain->isLearned() )
         {
           ++age;
-          xx = 34;
+          xx = m_w;
         }
 
-      int ind =  age; //( m_time/6000 ) % hello.size();
+      int ind =  age % hello.size();
       qDebug() << m_time
       << age 
                << "   WORD:" << ind << hello[ind].c_str()
@@ -1668,7 +1667,7 @@ void GameOfLife::development()
 
 }
 
-void GameOfLife::red ( char **lattice, int x, int y, int color )
+void GameOfLife::red ( wchar_t **lattice, int x, int y, int color )
 {
 
   int r[7][17] =
@@ -1695,7 +1694,7 @@ void GameOfLife::red ( char **lattice, int x, int y, int color )
     }
 }
 
-void GameOfLife::green ( char **lattice, int x, int y, int color )
+void GameOfLife::green ( wchar_t **lattice, int x, int y, int color )
 {
 
   int r[7][29] =
@@ -1723,7 +1722,7 @@ void GameOfLife::green ( char **lattice, int x, int y, int color )
     }
 }
 
-void GameOfLife::blue ( char **lattice, int x, int y, int color )
+void GameOfLife::blue ( wchar_t **lattice, int x, int y, int color )
 {
 
   int r[7][21] =
@@ -1751,7 +1750,7 @@ void GameOfLife::blue ( char **lattice, int x, int y, int color )
     }
 }
 
-void GameOfLife::glider ( char **lattice, int x, int y )
+void GameOfLife::glider ( wchar_t **lattice, int x, int y )
 {
 
   lattice[y+0][x+2] = 1;
@@ -1762,7 +1761,7 @@ void GameOfLife::glider ( char **lattice, int x, int y )
 
 }
 
-void GameOfLife::house ( char **lattice, int x, int y )
+void GameOfLife::house ( wchar_t **lattice, int x, int y )
 {
 
   lattice[y+0][x+3] = 1;
@@ -1797,7 +1796,7 @@ void GameOfLife::house ( char **lattice, int x, int y )
   lattice[y+8][x+6] = 1;
 }
 
-void GameOfLife::man ( char **lattice, int x, int y )
+void GameOfLife::man ( wchar_t **lattice, int x, int y )
 {
 
   lattice[y+0][x+1] = 1;
@@ -1813,7 +1812,7 @@ void GameOfLife::man ( char **lattice, int x, int y )
 
 }
 
-void GameOfLife::car ( char **lattice, int x, int y )
+void GameOfLife::car ( wchar_t **lattice, int x, int y )
 {
 
   lattice[y+0][x+1] = 1;

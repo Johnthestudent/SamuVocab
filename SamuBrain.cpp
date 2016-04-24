@@ -78,15 +78,15 @@ MentalProcessingUnit::MentalProcessingUnit ( int w, int h ) : m_w ( w ), m_h ( h
       m_samuQl[i] = new QL [m_w];
     }
 
-  m_prev = new char*[m_h];
-  fp = new char*[m_h];
-  fr = new char*[m_h];
+  m_prev = new wchar_t*[m_h];
+  fp = new wchar_t*[m_h];
+  fr = new wchar_t*[m_h];
 
   for ( int i {0}; i<m_h; ++i )
     {
-      m_prev[i] = new char [m_w];
-      fp[i] = new char [m_w];
-      fr[i] = new char [m_w];
+      m_prev[i] = new wchar_t [m_w];
+      fp[i] = new wchar_t [m_w];
+      fr[i] = new wchar_t [m_w];
     }
 
   for ( int r {0}; r<m_h; ++r )
@@ -192,17 +192,17 @@ double SamuBrain::howMuchLearned ( MPU samuQl ) const
 }
 */
 
-int SamuBrain::pred ( char **reality, char **predictions, int isLearning, int & vsum )
+int SamuBrain::pred ( wchar_t **reality, wchar_t **predictions, int isLearning, int & vsum )
 {
   return pred ( m_morgan, reality, predictions, isLearning, vsum );
 }
 
 /*
-int SamuBrain::pred ( MORGAN morgan, char **reality, char **predictions, int isLearning, int & vsum )
+int SamuBrain::pred ( MORGAN morgan, wchar_t **reality, wchar_t **predictions, int isLearning, int & vsum )
 {
 
   MPU samuQl = morgan->getSamu();
-  char ** prev = morgan->getPrev();
+  wchar_t ** prev = morgan->getPrev();
 
   //double img_input[40];
   int colors[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -300,10 +300,8 @@ int SamuBrain::pred ( MORGAN morgan, char **reality, char **predictions, int isL
 */
 
 
-void SamuBrain::apred ( /*MORGAN morgan*/ int r, int c, char **reality, char **predictions, int isLearning )
+void SamuBrain::apred ( /*MORGAN morgan*/ int r, int c, wchar_t **reality, wchar_t **predictions, int isLearning )
 {
-
-
 
   /*
   for ( int r {0}; r<m_h; ++r )
@@ -386,9 +384,9 @@ void SamuBrain::apred ( /*MORGAN morgan*/ int r, int c, char **reality, char **p
 
             MORGAN morgan = mpu.second;
             MPU samuQl = morgan->getSamu();
-            char ** prev = morgan->getPrev();
-            char ** fp = morgan->getFp();
-            char ** fr = morgan->getFr();
+            wchar_t ** prev = morgan->getPrev();
+            wchar_t ** fp = morgan->getFp();
+            wchar_t ** fr = morgan->getFr();
 
             SPOTriplet response = samuQl[r][c] ( reality[r][c], prg, isLearning == 0 );
 
@@ -441,13 +439,13 @@ void SamuBrain::apred ( /*MORGAN morgan*/ int r, int c, char **reality, char **p
 }
 
 
-int SamuBrain::pred ( MORGAN morgan, char **reality, char **predictions, int isLearning, int & vsum )
+int SamuBrain::pred ( MORGAN morgan, wchar_t **reality, wchar_t **predictions, int isLearning, int & vsum )
 {
 
   MPU samuQl = morgan->getSamu();
-  char ** prev = morgan->getPrev();
-  char ** fp = morgan->getFp();
-  char ** fr = morgan->getFr();
+  wchar_t ** prev = morgan->getPrev();
+  wchar_t ** fp = morgan->getFp();
+  wchar_t ** fr = morgan->getFr();
 
   //double img_input[40];
   //int colors[256];
@@ -693,7 +691,6 @@ int SamuBrain::pred ( MORGAN morgan, char **reality, char **predictions, int isL
         }
 
     }
-
   return sum;
 }
 
@@ -851,8 +848,9 @@ bool Habituation::is_habituation ( int vsum, int sum, double &mon )
 }
 
 
-void SamuBrain::learning ( char **reality, char **predictions, char ***fp, char ***fr )
+void SamuBrain::learning ( wchar_t **reality, wchar_t **predictions, wchar_t ***fp, wchar_t ***fr )
 {
+
   this->fp = fp;
   this->fr = fr;
 

@@ -57,20 +57,21 @@
 #include <QPainter>
 #include <QFont>
 #include "GameOfLife.h"
+#include <cwchar>
 
 class SamuLife : public QMainWindow
 {
     Q_OBJECT
 
-    int m_cw {12*2}, m_ch {10*2};
+    int m_cw {18}, m_ch {18};
     GameOfLife *gameOfLife;
-    char **lattice {nullptr};
-    char **prediction {nullptr};
-    char **fp {nullptr};
-    char **fr {nullptr};
+    wchar_t **lattice {nullptr};
+    wchar_t **prediction {nullptr};
+    wchar_t **fp {nullptr};
+    wchar_t **fr {nullptr};
 
     public slots :
-    void updateCells ( char **, char **, char **, char ** );
+    void updateCells ( wchar_t **, wchar_t **, wchar_t **, wchar_t ** );
 
 public:
     SamuLife ( int w = 30, int h = 20, QWidget *parent = 0 );
